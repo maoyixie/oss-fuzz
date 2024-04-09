@@ -26,8 +26,10 @@ popd
 pushd my_build/fuzzing/
 cp FuzzStun $OUT/FuzzStun
 cp FuzzStunClient $OUT/FuzzStunClient
-# add
+# add FuzzStun2
 cp FuzzStun2 $OUT/FuzzStun2
+# add FuzzStun3
+cp FuzzStun3 $OUT/FuzzStun3
 popd
 
 pushd fuzzing/input/
