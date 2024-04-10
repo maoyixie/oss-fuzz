@@ -27,6 +27,14 @@ make libwc
 
 cd libwc
 $CC $CFLAGS -c ../fuzz/fuzz-conv.c -o fuzz_conv.o -I../ -I./
+
+# add
+$CC $CFLAGS -c ../fuzz/fuzzconv2.c -o fuzzconv2.o -I../ -I./
+
 static_libgc=($(find /usr/lib -name "libgc.a"))
 $CXX $CXXFLAGS $LIB_FUZZING_ENGINE fuzz_conv.o -o $OUT/fuzz_conv \
+    -I./libwc  -DUSE_UNICODE -I. -I./.. -DHAVE_CONFIG_H ../Str.o ../myctype.o libwc.a ${static_libgc}
+
+# add
+$CXX $CXXFLAGS $LIB_FUZZING_ENGINE fuzzconv2.o -o $OUT/fuzzconv2 \
     -I./libwc  -DUSE_UNICODE -I. -I./.. -DHAVE_CONFIG_H ../Str.o ../myctype.o libwc.a ${static_libgc}
