@@ -16,4 +16,5 @@
 ################################################################################
 
 cp tests/fuzzing/json_fuzzer.c $SRC/fuzzer.c
+cp tests/fuzzing/json_fuzzer2.c $SRC/fuzzer2.c
 tests/fuzzing/oss_fuzz_build.sh
