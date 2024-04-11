@@ -25,7 +25,7 @@ zip -r $OUT/fuzz_compile_seed_corpus.zip tests/*.js
 zip -r $OUT/fuzz_compile_seed_corpus.zip examples/*.js
 
 cd ..
-FUZZ_TARGETS="fuzz_eval fuzz_compile fuzz_regexp"
+FUZZ_TARGETS="fuzz_eval fuzz_compile fuzz_regexp fuzz_eval2 fuzz_regexp2"
 for f in $FUZZ_TARGETS; do
     $CC $CFLAGS -Iquickjs -c $f.c -o $f.o
     $CXX $CXXFLAGS $f.o -o $OUT/$f quickjs/libquickjs.a $LIB_FUZZING_ENGINE
