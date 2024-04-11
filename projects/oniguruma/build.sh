@@ -25,7 +25,10 @@ FUZZ_SRCDIR=harnesses
 FUZZ_TARGET=fuzzer
 
 # build fuzzer
-$CC $CFLAGS -o $FUZZ_SRCDIR/fuzzer_syntax.o -I src -c -DSYNTAX_TEST $FUZZ_SRCDIR/base.c
+# $CC $CFLAGS -o $FUZZ_SRCDIR/fuzzer_syntax.o -I src -c -DSYNTAX_TEST $FUZZ_SRCDIR/base.c
+# $CXX $CXXFLAGS -o $OUT/$FUZZ_TARGET $FUZZ_SRCDIR/fuzzer_syntax.o $LIB_FUZZING_ENGINE src/.libs/libonig.a
+#add
+$CC $CFLAGS -o $FUZZ_SRCDIR/fuzzer_syntax.o -I src -c -DSYNTAX_TEST $FUZZ_SRCDIR/libfuzzer-onig2.c
 $CXX $CXXFLAGS -o $OUT/$FUZZ_TARGET $FUZZ_SRCDIR/fuzzer_syntax.o $LIB_FUZZING_ENGINE src/.libs/libonig.a
 
 # setup files
