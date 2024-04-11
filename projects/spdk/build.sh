@@ -30,3 +30,13 @@ $CXX $CXXFLAGS $LIB_FUZZING_ENGINE \
         parse_json_fuzzer.o -o $OUT/parse_json_fuzzer \
         /src/spdk/build/lib/libspdk_env_dpdk.a \
         /src/spdk/build/lib/libspdk_json.a
+
+# add
+$CXX $CXXFLAGS -I/src/spdk -I/src/spdk/include \
+        -fPIC -c $SRC/parse_json_fuzzer2.cc \
+        -o parse_json_fuzzer2.o
+
+$CXX $CXXFLAGS $LIB_FUZZING_ENGINE \
+        parse_json_fuzzer2.o -o $OUT/parse_json_fuzzer2 \
+        /src/spdk/build/lib/libspdk_env_dpdk.a \
+        /src/spdk/build/lib/libspdk_json.a
