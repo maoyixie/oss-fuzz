@@ -16,7 +16,7 @@
 
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends bison \
+	apt-get install -y --no-install-recommends bison \
 	flex \
 	gawk \
 	gettext \
@@ -27,6 +27,6 @@ RUN apt-get update && \
 	libcap-ng-dev \
 	libglib2.0-dev \
 	libpcre2-dev
-RUN git clone --depth 1 https://github.com/SELinuxProject/selinux
+RUN git clone --depth 1 https://github.com/maoyixie/selinux.git
 WORKDIR selinux
 COPY build.sh $SRC/
