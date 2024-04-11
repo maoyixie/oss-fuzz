@@ -21,4 +21,4 @@ RUN git clone --depth 1 --jobs $(nproc) https://github.com/ligurio/lua-c-api-cor
 COPY build.sh testdir/
 WORKDIR $SRC
 COPY build.sh $SRC/
-COPY fuzz_lua.c $SRC/
+COPY fuzz_lua.c fuzz_lua2.c $SRC/

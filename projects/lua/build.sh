@@ -100,6 +100,10 @@ LUALIB_PATH="$SRC/testdir/build/lua-master/source/"
 $CC $CFLAGS -I$LUALIB_PATH -c $SRC/fuzz_lua.c -o fuzz_lua.o
 $CXX $CXXFLAGS $LIB_FUZZING_ENGINE fuzz_lua.o -o $OUT/fuzz_lua $LUALIB_PATH/liblua.a
 
+#add
+$CC $CFLAGS -I$LUALIB_PATH -c $SRC/fuzz_lua2.c -o fuzz_lua2.o
+$CXX $CXXFLAGS $LIB_FUZZING_ENGINE fuzz_lua2.o -o $OUT/fuzz_lua2 $LUALIB_PATH/liblua.a
+
 # If the dict filename is the same as your target binary name
 # (i.e. `%fuzz_target%.dict`), it will be automatically used.
 # If the name is different (e.g. because it is shared by several
