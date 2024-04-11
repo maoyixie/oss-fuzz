@@ -21,4 +21,6 @@ RUN git clone --depth 1 https://github.com/spdk/spdk && \
     cd spdk && \
     git submodule update --init
 WORKDIR $SRC/spdk
-COPY build.sh parse_json_fuzzer.cc parse_json_fuzzer2.cc $SRC/
+COPY build.sh parse_json_fuzzer.cc $SRC/
+# add
+# COPY parse_json_fuzzer2.cc $SRC/
