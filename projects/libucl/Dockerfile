@@ -16,7 +16,7 @@
 
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y make cmake autoconf pkg-config libtool
-RUN git clone https://github.com/vstakhov/libucl
+RUN git clone https://github.com/maoyixie/libucl.git
 
 WORKDIR $SRC
 

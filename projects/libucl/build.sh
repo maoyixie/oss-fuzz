@@ -25,3 +25,10 @@ $CC $CFLAGS -c tests/fuzzers/ucl_add_string_fuzzer.c \
   -o $OUT/ucl_add_string_fuzzer.o
 
 $CXX $CXXFLAGS $LIB_FUZZING_ENGINE $OUT/ucl_add_string_fuzzer.o -DHAVE_CONFIG_H -I./src -I./include src/.libs/libucl.a -I. -o $OUT/ucl_add_string_fuzzer
+
+# add
+$CC $CFLAGS -c tests/fuzzers/ucl_parser_add_string.c \
+  -DHAVE_CONFIG_H -I./src -I./include src/.libs/libucl.a -I./ \
+  -o $OUT/ucl_parser_add_string.o
+
+$CXX $CXXFLAGS $LIB_FUZZING_ENGINE $OUT/ucl_parser_add_string.o -DHAVE_CONFIG_H -I./src -I./include src/.libs/libucl.a -I. -o $OUT/ucl_parser_add_string
