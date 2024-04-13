@@ -21,6 +21,10 @@ make all
 cp FuzzClient $OUT/FuzzClient
 cp FuzzServer $OUT/FuzzServer
 
+#add
+cp modbus_read_bits $OUT/modbus_read_bits
+cp modbus_read_registers $OUT/modbus_read_registers
+
 pushd $SRC/oss-fuzz-bloat/libmodbus/
 cp FuzzClient_seed_corpus.zip $OUT/FuzzClient_seed_corpus.zip
 cp FuzzServer_seed_corpus.zip $OUT/FuzzServer_seed_corpus.zip
