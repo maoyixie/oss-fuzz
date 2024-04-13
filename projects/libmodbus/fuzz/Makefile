@@ -3,6 +3,9 @@ TARGET=Fuzzer
 #File
 CLIENTEXE=FuzzClient
 SERVEREXE=FuzzServer
+#add
+BITSEXE=modbus_read_bits
+REGISTERSEXE=modbus_read_registers
 
 #Compiler Flags
 SET=cd ../ &&
@@ -32,8 +35,15 @@ $(TARGET): INIT CONF MAKEALL CPFILE
 
 	$(CC) $(EXTCFLAGS) $(CFLAGS) $(INC) -c $(SERVEREXE).c
 	$(LIBTOOL) $(CXX) $(LDFLAGS) $(CFLAGS) $(LIB) $(LIB_FUZZING_ENGINE) $(SERVEREXE).o -o $(SERVEREXE)
+	
+
+	$(CC) $(EXTCFLAGS) $(CFLAGS) $(INC) -c $(BITSEXE).c
+	$(LIBTOOL) $(CXX) $(LDFLAGS) $(CFLAGS) $(LIB) $(LIB_FUZZING_ENGINE) $(BITSEXE).o -o $(BITSEXE)
+
+	$(CC) $(EXTCFLAGS) $(CFLAGS) $(INC) -c $(REGISTERSEXE).c
+	$(LIBTOOL) $(CXX) $(LDFLAGS) $(CFLAGS) $(LIB) $(LIB_FUZZING_ENGINE) $(REGISTERSEXE).o -o $(REGISTERSEXE)
 
 clean:
-	rm $(CLIENTEXE) $(SERVEREXE) *.o
+	rm $(CLIENTEXE) $(SERVEREXE) $(BITSEXE) $(REGISTERSEXE) *.o
 
 .PHONY: all clean
