@@ -15,7 +15,7 @@
 ################################################################################
 
 FROM gcr.io/oss-fuzz-base/base-builder
-RUN git clone https://github.com/mz-automation/libiec61850
+RUN git clone https://github.com/maoyixie/libiec61850.git
 
 WORKDIR $SRC
 COPY build.sh $SRC/

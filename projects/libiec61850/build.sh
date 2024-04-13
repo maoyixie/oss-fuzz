@@ -27,5 +27,13 @@ $CC $CFLAGS $LIB_FUZZING_ENGINE ../fuzz/fuzz_mms_decode.c -c \
 
 $CXX $CXXFLAGS -fuse-ld=lld $LIB_FUZZING_ENGINE fuzz_mms_decode.o -o $OUT/fuzz_mms_decode ./src/libiec61850.a ./hal/libhal.a
 
+#add
+$CC $CFLAGS $LIB_FUZZING_ENGINE ../fuzz/MmsValue_decodeMmsData.c -c \
+	-I../src/iec61850/inc -I../src/mms/inc -I../src/common/inc \
+	-I../hal/inc -I../src/logging
+
+
+$CXX $CXXFLAGS -fuse-ld=lld $LIB_FUZZING_ENGINE MmsValue_decodeMmsData.o -o $OUT/MmsValue_decodeMmsData ./src/libiec61850.a ./hal/libhal.a
+
 # Copy over the options file
 cp $SRC/fuzz_decode.options $OUT/fuzz_decode.options
