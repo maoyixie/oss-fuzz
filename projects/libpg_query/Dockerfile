@@ -15,6 +15,6 @@
 ################################################################################
 
 FROM gcr.io/oss-fuzz-base/base-builder
-RUN git clone --depth 1 https://github.com/pganalyze/libpg_query libpg_query
+RUN git clone --depth 1 https://github.com/maoyixie/libpg_query.git libpg_query
 WORKDIR libpg_query
 COPY build.sh $SRC/
