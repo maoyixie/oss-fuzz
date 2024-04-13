@@ -16,7 +16,7 @@
 
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y autoconf automake libtool
-RUN git clone https://github.com/CESNET/libyang
+RUN git clone https://github.com/maoyixie/libyang.git
 
 RUN git clone https://github.com/PCRE2Project/pcre2 pcre2 && \
     cd pcre2 && \
