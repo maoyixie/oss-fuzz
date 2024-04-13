@@ -20,7 +20,7 @@ FROM gcr.io/oss-fuzz-base/base-builder
 
 RUN apt-get update && apt-get install -y cmake pkg-config zlib1g-dev libbz2-dev liblzma-dev libzstd-dev
 
-RUN git clone --depth 1 https://github.com/nih-at/libzip.git
+RUN git clone --depth 1 https://github.com/maoyixie/libzip.git
 
 WORKDIR libzip
 COPY build.sh $SRC/
