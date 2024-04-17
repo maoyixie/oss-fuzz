@@ -79,7 +79,7 @@ fuzzers=$(find $SRC/fuzz/ -name "*_fuzzer.c")
 for f in $fuzzers; do
   fuzzer_name=$(basename $f .c)
   $CC $CFLAGS $BUILD_CFLAGS -c $f -o $WORK/${fuzzer_name}.o
-  $CXX $CXXFLAGS \
+  $CXX $CXXFLAGS -g \
     $WORK/${fuzzer_name}.o -o $OUT/${fuzzer_name} \
     $PREDEPS_LDFLAGS \
     $BUILD_LDFLAGS \
