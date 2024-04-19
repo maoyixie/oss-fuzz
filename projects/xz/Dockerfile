@@ -1,5 +1,4 @@
-#!/bin/bash -eu
-# Copyright 2023 Google LLC
+# Copyright 2018 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,4 +14,8 @@
 #
 ################################################################################
 
-. "$SRC/gitpython/fuzzing/oss-fuzz-scripts/build.sh"
+FROM gcr.io/oss-fuzz-base/base-builder
+RUN apt-get update && apt-get install -y make autoconf autopoint libtool zip
+RUN git clone https://github.com/tukaani-project/xz.git
+COPY build.sh $SRC/
+WORKDIR xz
