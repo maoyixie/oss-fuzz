@@ -9,16 +9,16 @@ extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
     }
 
     GdkColorspace colorspace = GDK_COLORSPACE_RGB;
-    gboolean has_alpha = Data[0] % 2;
+    gboolean has_alpha = Data[0] % 2; //=1
     int bits_per_sample = 8;
     int rowstride;
     int width;
     int height;
 
     // Calculate width and height based on the input size.
-    int area = Size / (has_alpha ? 4 : 3);
-    height = sqrt(area);
-    width = area / height;
+    int area = Size / (has_alpha ? 4 : 3); //=0
+    height = sqrt(area);                   //=0
+    width = area / height;                 // divide zero
 
     // Calculate rowstride based on width and the number of channels.
     rowstride = width * (has_alpha ? 4 : 3);

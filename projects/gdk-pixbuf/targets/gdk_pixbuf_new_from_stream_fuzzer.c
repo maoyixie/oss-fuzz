@@ -7,7 +7,7 @@ extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
     GdkPixbuf *pixbuf;
     GError *error = NULL;
     GCancellable *cancellable = g_cancellable_new();
-    g_assert(Size > 0);
+    g_assert(Size > 0); // crash
 
     // Create a new memory input stream from the provided data
     stream = g_memory_input_stream_new_from_data(Data, Size, NULL);
