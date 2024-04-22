@@ -20,7 +20,7 @@ extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
     char szXtra1[65];
     char szXtra2[65];
 
-    GetINCHIKeyFromINCHI(szINCHISource, xtra1, xtra2, szINCHIKey, szXtra1, szXtra2);
+    GetINCHIKeyFromINCHI(szINCHISource, xtra1, xtra2, szINCHIKey, szXtra1, szXtra2); // bug: heap-buffer-overflow
 
     return 0;
 }
