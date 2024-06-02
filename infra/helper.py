@@ -1487,8 +1487,9 @@ def run_fuzzer(args):
     if not check_project_exists(args.project):
         return False
 
-    if not _check_fuzzer_exists(args.project, args.fuzzer_name):
-        return False
+  if not _check_fuzzer_exists(args.project, args.fuzzer_name,
+                              args.architecture):
+    return False
 
     env = [
         "FUZZING_ENGINE=" + args.engine,
@@ -1667,8 +1668,8 @@ def reproduce_impl(  # pylint: disable=too-many-arguments
     if not check_project_exists(project):
         return err_result
 
-    if not _check_fuzzer_exists(project, fuzzer_name):
-        return err_result
+  if not _check_fuzzer_exists(project, fuzzer_name, architecture):
+    return err_result
 
     debugger = ""
     env = ["HELPER=True", "ARCHITECTURE=" + architecture]
