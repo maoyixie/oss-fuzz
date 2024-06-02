@@ -31,7 +31,7 @@ extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
     inpInChI.szInChI = inchiString;
 
     // Call the target function
-    int result = GetStructFromINCHI(&inpInChI, &outStruct); // bug
+    int result = GetStructFromINCHI(&inpInChI, &outStruct);
 
     // Free allocated memory
     free(inchiString);
