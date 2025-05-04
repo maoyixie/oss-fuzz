@@ -17,6 +17,7 @@
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y cmake yasm wget
 RUN git clone https://aomedia.googlesource.com/aom
+RUN git checkout 6a1c55623805960d2a3ec0545e91263cf16441db
 ADD https://storage.googleapis.com/aom-test-data/fuzzer/dec_fuzzer_seed_corpus.zip $SRC/
 COPY build.sh $SRC/
 WORKDIR aom
