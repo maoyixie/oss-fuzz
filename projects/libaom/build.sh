@@ -15,6 +15,10 @@
 #
 ################################################################################
 
+# Patch for Arash
+export CFLAGS="-O1 -g -fsanitize=address -fno-omit-frame-pointer"
+export CXXFLAGS="-O1 -g -fsanitize=address -fno-omit-frame-pointer"
+
 # Build libaom
 build_dir=$WORK/build
 mkdir -p ${build_dir}
@@ -42,12 +46,19 @@ if [[ $CFLAGS = *sanitize=memory* ]]; then
   extra_cmake_flags+="-DAOM_TARGET_CPU=generic"
 fi
 
-cmake $SRC/aom -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS_RELEASE='-O3 -g' \
-  -DCMAKE_CXX_FLAGS_RELEASE='-O3 -g' -DCONFIG_PIC=1 -DCONFIG_LOWBITDEPTH=1 \
+# Patch for Arash
+cmake $SRC/aom -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="$CFLAGS" \
+  -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCONFIG_PIC=1 -DCONFIG_LOWBITDEPTH=1 \
   -DCONFIG_AV1_ENCODER=0 -DENABLE_EXAMPLES=0 -DENABLE_DOCS=0 -DENABLE_TESTS=0 \
   -DCONFIG_SIZE_LIMIT=1 -DDECODE_HEIGHT_LIMIT=12288 -DDECODE_WIDTH_LIMIT=12288 \
   -DAOM_EXTRA_C_FLAGS="${extra_c_flags}" -DENABLE_TOOLS=0 \
   -DAOM_EXTRA_CXX_FLAGS="${extra_c_flags}" ${extra_cmake_flags}
+# cmake $SRC/aom -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS_RELEASE='-O3 -g' \
+#   -DCMAKE_CXX_FLAGS_RELEASE='-O3 -g' -DCONFIG_PIC=1 -DCONFIG_LOWBITDEPTH=1 \
+#   -DCONFIG_AV1_ENCODER=0 -DENABLE_EXAMPLES=0 -DENABLE_DOCS=0 -DENABLE_TESTS=0 \
+#   -DCONFIG_SIZE_LIMIT=1 -DDECODE_HEIGHT_LIMIT=12288 -DDECODE_WIDTH_LIMIT=12288 \
+#   -DAOM_EXTRA_C_FLAGS="${extra_c_flags}" -DENABLE_TOOLS=0 \
+#   -DAOM_EXTRA_CXX_FLAGS="${extra_c_flags}" ${extra_cmake_flags}
 make -j$(nproc)
 popd
 
