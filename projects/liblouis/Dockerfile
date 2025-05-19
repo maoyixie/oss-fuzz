@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y make autoconf automake libtool \
   pkg-config zlib1g-dev libpci-dev
 RUN git clone --depth 1 https://github.com/liblouis/liblouis
 WORKDIR liblouis
-# RUN git fetch --unshallow && \
-#     git checkout 61b3e3f0193b8e1383bf525eb282389957de6da6
+RUN git fetch --unshallow && \
+    git checkout f25fbbd1252d3d8c692ccb955ab341e658ffc39d
 
 COPY build.sh $SRC/
