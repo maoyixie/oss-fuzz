@@ -31,7 +31,13 @@ grep -q 'int main2(int argc' ./src/clib-search.c || \
 grep -q 'int main2(int argc' ./src/clib-configure.c || \
   sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-configure.c
 
-# patch 4
+# patch 4 - compile all deps/*.c to deps/*.o
+find deps -name '*.c' -exec $CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__ \
+  -DHAVE_PTHREADS=1 -pthread \
+  -I./asprintf -I./deps -I./deps/asprintf \
+  -c {} \;
+
+# patch 5
 $CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__ \
   -DHAVE_PTHREADS=1 -pthread \
   -I./asprintf -I./deps -I./deps/asprintf \
@@ -57,9 +63,10 @@ $CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__ \
   -I./asprintf -I./deps -I./deps/asprintf \
   -c test/fuzzing/fuzz_manifest.c -o fuzz_manifest.o
 
-find . -name "*.o" -exec ar rcs fuzz_lib.a {} \;
+# patch 6
+# find . -name "*.o" -exec ar rcs fuzz_lib.a {} \;
 
-# patch 5
+# patch 7
 # $CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__  \
 # 	-DHAVE_PTHREADS=1 -pthread \
 # 	-c src/common/clib-cache.c src/clib-configure.c\
@@ -67,8 +74,10 @@ find . -name "*.o" -exec ar rcs fuzz_lib.a {} \;
 #         test/fuzzing/fuzz_manifest.c -I./asprintf -I./deps/ \
 # 	-I./deps/asprintf
 
+# patch 8
 $CXX $CXXFLAGS $LIB_FUZZING_ENGINE fuzz_manifest.o \
 	-o $OUT/fuzz_manifest  clib-cache.o clib-configure.o clib-settings.o clib-package.o \
+	$(find deps -name '*.o') \
 	-I./deps/asprintf -I./deps -I./asprintf \
 	fuzz_lib.a -L/usr/lib/x86_64-linux-gnu -lcurl
 
