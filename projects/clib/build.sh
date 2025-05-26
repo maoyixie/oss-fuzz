@@ -79,7 +79,7 @@ $CXX $CXXFLAGS $LIB_FUZZING_ENGINE fuzz_manifest.o \
 	-o $OUT/fuzz_manifest  clib-cache.o clib-configure.o clib-settings.o clib-package.o \
 	$(find deps -name '*.o') \
 	-I./deps/asprintf -I./deps -I./asprintf \
-	fuzz_lib.a -L/usr/lib/x86_64-linux-gnu -lcurl
+	-L/usr/lib/x86_64-linux-gnu -lcurl
 
 echo "[libfuzzer]" > $OUT/fuzz_manifest.options
 echo "detect_leaks=0" >> $OUT/fuzz_manifest.options
