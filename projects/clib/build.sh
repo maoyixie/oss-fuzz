@@ -18,8 +18,15 @@
 cd clib
 make -j$(nproc)
 
-sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-search.c
-sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-configure.c
+# sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-search.c
+# sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-configure.c
+
+# only apply sed once
+grep -q 'int main2(int argc' ./src/clib-search.c || \
+  sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-search.c
+
+grep -q 'int main2(int argc' ./src/clib-configure.c || \
+  sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-configure.c
 
 find . -name "*.o" -exec ar rcs fuzz_lib.a {} \;
 
