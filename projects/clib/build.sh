@@ -16,12 +16,6 @@
 ################################################################################
 
 cd clib
-
-# patch
-make clean || true
-rm -f fuzz_lib.a
-find . -type f -name '*.o' -delete
-
 make -j$(nproc)
 
 sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-search.c
