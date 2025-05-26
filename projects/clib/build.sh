@@ -16,23 +16,37 @@
 ################################################################################
 
 cd clib
-make -j$(nproc)
 
+# patch 1
+# make -j$(nproc)
+
+# patch 2
 # sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-search.c
 # sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-configure.c
 
+# patch 3
 # only apply sed once
 grep -q 'int main2(int argc' ./src/clib-search.c || \
   sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-search.c
-
 grep -q 'int main2(int argc' ./src/clib-configure.c || \
   sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-configure.c
+
+# patch 4
+$CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__ \
+  -DHAVE_PTHREADS=1 -pthread \
+  -I./asprintf -I./deps -I./deps/asprintf \
+  -c src/clib-configure.c -o clib-configure.o
+$CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__ \
+  -DHAVE_PTHREADS=1 -pthread \
+  -I./asprintf -I./deps -I./deps/asprintf \
+  -c src/clib-search.c -o clib-search.o
 
 find . -name "*.o" -exec ar rcs fuzz_lib.a {} \;
 
 $CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__  \
 	-DHAVE_PTHREADS=1 -pthread \
-	-c src/common/clib-cache.c src/clib-configure.c \
+	# patch 5
+	-c src/common/clib-cache.c \
         src/common/clib-settings.c src/common/clib-package.c \
         test/fuzzing/fuzz_manifest.c -I./asprintf -I./deps/ \
 	-I./deps/asprintf
