@@ -40,16 +40,32 @@ $CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__ \
   -DHAVE_PTHREADS=1 -pthread \
   -I./asprintf -I./deps -I./deps/asprintf \
   -c src/clib-search.c -o clib-search.o
+$CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__ \
+  -DHAVE_PTHREADS=1 -pthread \
+  -I./asprintf -I./deps -I./deps/asprintf \
+  -c src/common/clib-cache.c -o clib-cache.o
+$CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__ \
+  -DHAVE_PTHREADS=1 -pthread \
+  -I./asprintf -I./deps -I./deps/asprintf \
+  -c src/common/clib-settings.c -o clib-settings.o
+$CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__ \
+  -DHAVE_PTHREADS=1 -pthread \
+  -I./asprintf -I./deps -I./deps/asprintf \
+  -c src/common/clib-package.c -o clib-package.o
+$CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__ \
+  -DHAVE_PTHREADS=1 -pthread \
+  -I./asprintf -I./deps -I./deps/asprintf \
+  -c test/fuzzing/fuzz_manifest.c -o fuzz_manifest.o
 
 find . -name "*.o" -exec ar rcs fuzz_lib.a {} \;
 
-$CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__  \
-	-DHAVE_PTHREADS=1 -pthread \
-	# patch 5
-	-c src/common/clib-cache.c \
-        src/common/clib-settings.c src/common/clib-package.c \
-        test/fuzzing/fuzz_manifest.c -I./asprintf -I./deps/ \
-	-I./deps/asprintf
+# patch 5
+# $CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__  \
+# 	-DHAVE_PTHREADS=1 -pthread \
+# 	-c src/common/clib-cache.c src/clib-configure.c\
+#         src/common/clib-settings.c src/common/clib-package.c \
+#         test/fuzzing/fuzz_manifest.c -I./asprintf -I./deps/ \
+# 	-I./deps/asprintf
 
 $CXX $CXXFLAGS $LIB_FUZZING_ENGINE fuzz_manifest.o \
 	-o $OUT/fuzz_manifest  clib-cache.o clib-configure.o clib-settings.o clib-package.o \
