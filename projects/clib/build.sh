@@ -16,12 +16,18 @@
 ################################################################################
 
 cd clib
+make clean >/dev/null 2>&1 || true
 make -j$(nproc)
 
-sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-search.c
-sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-configure.c
+if ! grep -q "int main2(" ./src/clib-search.c; then
+  sed -i 's/int main(int argc/int main2(int argc/' ./src/clib-search.c
+fi
+if ! grep -q "int main2(" ./src/clib-configure.c; then
+  sed -i 's/int main(int argc/int main2(int argc/' ./src/clib-configure.c
+fi
 
-find . -name "*.o" -exec ar rcs fuzz_lib.a {} \;
+rm -f fuzz_lib.a
+find . -name "*.o" -print0 | xargs -0 ar rcs fuzz_lib.a
 
 $CC $CFLAGS -Wno-unused-function -U__STRICT_ANSI__  \
 	-DHAVE_PTHREADS=1 -pthread \
