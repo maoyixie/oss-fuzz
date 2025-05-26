@@ -21,6 +21,7 @@ cd clib
 make clean || true
 rm -f fuzz_lib.a
 find . -name '*.o' -delete
+find . -type f \( -name 'clib' -o -name 'clib-*' \) -exec rm -f {} +
 
 make -j$(nproc)
 
