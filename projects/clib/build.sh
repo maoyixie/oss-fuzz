@@ -75,7 +75,7 @@ sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-search.c
 sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-configure.c
 
 # 生成静态库（跟你原先脚本一样）
-find . -name "*.o" -exec ar rcs fuzz_lib.a {}
+find . -name "*.o" -exec ar rcs fuzz_lib.a {} +
 
 CC=gcc
 CFLAGS="-ggdb -O0"
