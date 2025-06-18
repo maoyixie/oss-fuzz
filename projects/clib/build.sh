@@ -37,3 +37,33 @@ $CXX $CXXFLAGS $LIB_FUZZING_ENGINE fuzz_manifest.o \
 
 echo "[libfuzzer]" > $OUT/fuzz_manifest.options
 echo "detect_leaks=0" >> $OUT/fuzz_manifest.options
+
+# aurora
+export AFL_DIR=/home1/maoyi/aurora/evaluation/afl-fuzz
+export OUT=/home1/maoyi/aurora/out
+make clean || true
+make -j$(nproc)
+
+# fuzz
+sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-search.c
+sed 's/int main(int argc/int main2(int argc/g' -i ./src/clib-configure.c
+
+# 生成静态库（跟你原先脚本一样）
+find . -name "*.o" -exec ar rcs fuzz_lib.a {} +
+
+CC=$AFL_DIR/afl-gcc
+CFLAGS="-O2 -g"
+
+# 编译 fuzz_manifest.o
+$CC $CFLAGS -DHAVE_PTHREADS=1 -pthread \
+     -c test/fuzzing/fuzz_manifest.c \
+     src/common/clib-cache.c src/clib-configure.c \
+     src/common/clib-settings.c src/common/clib-package.c \
+     -I./asprintf -I./deps -I./deps/asprintf
+
+# 链接，可把 $LIB_FUZZING_ENGINE 去掉（只给 LibFuzzer 用）
+$CC $CFLAGS fuzz_manifest.o clib-cache.o clib-configure.o \
+    clib-settings.o clib-package.o fuzz_lib.a \
+    -lcurl -pthread -o $OUT/fuzz_manifest_afl
+
+# trace
