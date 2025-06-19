@@ -70,6 +70,8 @@ cp $SRC/aom/examples/av1_dec_fuzzer.dict $OUT/${fuzzer_name}.dict
 
 # aurora
 
+# av1_highbd_dr_prediction_z3_avx2
+
 # fuzz
 export CC=$AFL_DIR/afl-clang
 export CXX=$AFL_DIR/afl-clang++
@@ -129,3 +131,67 @@ $CXX ${=CXXFLAGS} -I/home1/maoyi/aurora/aom -I$build_trace \
 
 $CXX ${=CXXFLAGS} av1_dec_fuzzer_trace.o \
       $build_trace/libaom.a -pthread -o $OUT/av1_dec_fuzzer_trace
+
+
+# av1_dr_prediction_z3_sse4_1
+
+# fuzz
+export CC=$AFL_DIR/afl-clang
+export CXX=$AFL_DIR/afl-clang++
+export AFL_USE_ASAN=1
+export CFLAGS="-O1 -g -fsanitize=address -fno-omit-frame-pointer"
+export CXXFLAGS="-O1 -g -fsanitize=address -fno-omit-frame-pointer -std=c++11"
+
+build_afl_2=/home1/maoyi/aurora/aom/build_afl_2
+rm -rf $build_afl_2 && mkdir -p $build_afl_2
+cmake -S /home1/maoyi/aurora/aom -B $build_afl_2 \
+  -DCMAKE_C_COMPILER="$CC" \
+  -DCMAKE_CXX_COMPILER="$CXX" \
+  -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+  -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+  -DCONFIG_LOWBITDEPTH=1 \
+  -DENABLE_EXAMPLES=0 \
+  -DENABLE_TESTS=0 \
+  -DCONFIG_AV1_ENCODER=0 \
+  -DCONFIG_SIZE_LIMIT=1 \
+  -DDECODE_HEIGHT_LIMIT=12288 \
+  -DDECODE_WIDTH_LIMIT=12288 \
+  -DDO_RANGE_CHECK_CLAMP=1 \
+  -DAOM_MAX_ALLOCABLE_MEMORY=1073741824
+cmake --build $build_afl_2 -j$(nproc)
+
+$CXX $CXXFLAGS -I/home1/maoyi/aurora/aom -I$build_afl_2 \
+      -c /home1/maoyi/aurora/aom/examples/av1_dec_fuzzer_afl_2.cc -o av1_dec_fuzzer_afl_2.o
+
+$CXX $CXXFLAGS av1_dec_fuzzer_afl_2.o \
+      $build_afl_2/libaom.a -pthread -o $OUT/av1_dec_fuzzer_afl_2
+
+# trace
+export CC=clang
+export CXX=clang++
+export CFLAGS="-O0 -ggdb -fsanitize=address -fno-omit-frame-pointer"
+export CXXFLAGS="-O0 -ggdb -fsanitize=address -fno-omit-frame-pointer -std=c++11"
+
+build_trace_2=/home1/maoyi/aurora/aom/build_trace_2
+rm -rf $build_trace_2 && mkdir -p $build_trace_2
+cmake -S /home1/maoyi/aurora/aom -B $build_trace_2 \
+  -DCMAKE_C_COMPILER="$CC" \
+  -DCMAKE_CXX_COMPILER="$CXX" \
+  -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+  -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+  -DCONFIG_LOWBITDEPTH=1 \
+  -DENABLE_EXAMPLES=0 \
+  -DENABLE_TESTS=0 \
+  -DCONFIG_AV1_ENCODER=0 \
+  -DCONFIG_SIZE_LIMIT=1 \
+  -DDECODE_HEIGHT_LIMIT=12288 \
+  -DDECODE_WIDTH_LIMIT=12288 \
+  -DDO_RANGE_CHECK_CLAMP=1 \
+  -DAOM_MAX_ALLOCABLE_MEMORY=1073741824
+cmake --build $build_trace_2 -j$(nproc)
+
+$CXX ${=CXXFLAGS} -I/home1/maoyi/aurora/aom -I$build_trace_2 \
+      -c /home1/maoyi/aurora/aom/examples/av1_dec_fuzzer_trace_2.cc -o av1_dec_fuzzer_trace_2.o
+
+$CXX ${=CXXFLAGS} av1_dec_fuzzer_trace_2.o \
+      $build_trace_2/libaom.a -pthread -o $OUT/av1_dec_fuzzer_trace_2
