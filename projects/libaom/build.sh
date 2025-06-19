@@ -67,3 +67,65 @@ $CXX $CXXFLAGS -std=c++11 \
 cp $SRC/dec_fuzzer_seed_corpus.zip $OUT/${fuzzer_name}_seed_corpus.zip
 cp $SRC/aom/examples/av1_dec_fuzzer.dict $OUT/${fuzzer_name}.dict
 
+
+# aurora
+
+# fuzz
+export CC=$AFL_DIR/afl-clang
+export CXX=$AFL_DIR/afl-clang++
+export CFLAGS="-O2 -g"
+export CXXFLAGS="-O2 -g -std=c++11"
+
+build_afl=/home1/maoyi/aurora/aom/build_afl
+rm -rf $build_afl && mkdir -p $build_afl
+cmake -S /home1/maoyi/aurora/aom -B $build_afl \
+  -DCMAKE_C_COMPILER="$CC" \
+  -DCMAKE_CXX_COMPILER="$CXX" \
+  -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+  -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+  -DCONFIG_LOWBITDEPTH=1 \
+  -DENABLE_EXAMPLES=0 \
+  -DENABLE_TESTS=0 \
+  -DCONFIG_AV1_ENCODER=0 \
+  -DCONFIG_SIZE_LIMIT=1 \
+  -DDECODE_HEIGHT_LIMIT=12288 \
+  -DDECODE_WIDTH_LIMIT=12288 \
+  -DDO_RANGE_CHECK_CLAMP=1 \
+  -DAOM_MAX_ALLOCABLE_MEMORY=1073741824
+cmake --build $build_afl -j$(nproc)
+
+$CXX $CXXFLAGS -I/home1/maoyi/aurora/aom -I$build_afl \
+      -c /home1/maoyi/aurora/aom/examples/av1_dec_fuzzer_afl.cc -o av1_dec_fuzzer_afl.o
+
+$CXX $CXXFLAGS av1_dec_fuzzer_afl.o \
+      $build_afl/libaom.a -pthread -o $OUT/av1_dec_fuzzer_afl
+
+# trace
+export CC=clang
+export CXX=clang++
+export CFLAGS="-ggdb -O0"
+export CXXFLAGS="-ggdb -O0 -std=c++11"
+
+build_trace=/home1/maoyi/aurora/aom/build_trace
+rm -rf $build_trace && mkdir -p $build_trace
+cmake -S /home1/maoyi/aurora/aom -B $build_trace \
+  -DCMAKE_C_COMPILER="$CC" \
+  -DCMAKE_CXX_COMPILER="$CXX" \
+  -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
+  -DCMAKE_CXX_FLAGS_RELEASE="$CXXFLAGS" \
+  -DCONFIG_LOWBITDEPTH=1 \
+  -DENABLE_EXAMPLES=0 \
+  -DENABLE_TESTS=0 \
+  -DCONFIG_AV1_ENCODER=0 \
+  -DCONFIG_SIZE_LIMIT=1 \
+  -DDECODE_HEIGHT_LIMIT=12288 \
+  -DDECODE_WIDTH_LIMIT=12288 \
+  -DDO_RANGE_CHECK_CLAMP=1 \
+  -DAOM_MAX_ALLOCABLE_MEMORY=1073741824
+cmake --build $build_trace -j$(nproc)
+
+$CXX ${=CXXFLAGS} -I/home1/maoyi/aurora/aom -I$build_trace \
+      -c /home1/maoyi/aurora/aom/examples/av1_dec_fuzzer_trace.cc -o av1_dec_fuzzer_trace.o
+
+$CXX ${=CXXFLAGS} av1_dec_fuzzer_trace.o \
+      $build_trace/libaom.a -pthread -o $OUT/av1_dec_fuzzer_trace
