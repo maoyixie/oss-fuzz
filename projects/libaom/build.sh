@@ -73,14 +73,23 @@ cp $SRC/aom/examples/av1_dec_fuzzer.dict $OUT/${fuzzer_name}.dict
 # av1_highbd_dr_prediction_z3_avx2
 
 # fuzz
+# export AFL_USE_ASAN=1
 export CC=$AFL_DIR/afl-clang
 export CXX=$AFL_DIR/afl-clang++
-export CFLAGS="-O2 -g"
-export CXXFLAGS="-O2 -g -std=c++11"
 
-build_afl=/home1/maoyi/aurora/aom/build_afl
+DBG_FLAGS="-g3 -gcolumn-info -fno-omit-frame-pointer"
+# SAN_FLAGS="-fsanitize=address -fsanitize-recover=address"
+OPT_FLAGS="-O2"
+STD_FLAGS="-std=c++11"
+
+# export CFLAGS="$OPT_FLAGS $DBG_FLAGS $SAN_FLAGS"
+# export CXXFLAGS="$OPT_FLAGS $DBG_FLAGS $SAN_FLAGS $STD_FLAGS"
+export CFLAGS="$OPT_FLAGS $DBG_FLAGS"
+export CXXFLAGS="$OPT_FLAGS $DBG_FLAGS $STD_FLAGS"
+
+build_afl=/home1/maoyi/aom/build_av1_highbd_dr_prediction_z3_avx2_afl
 rm -rf $build_afl && mkdir -p $build_afl
-cmake -S /home1/maoyi/aurora/aom -B $build_afl \
+cmake -S /home1/maoyi/aom -B $build_afl \
   -DCMAKE_C_COMPILER="$CC" \
   -DCMAKE_CXX_COMPILER="$CXX" \
   -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
@@ -96,21 +105,26 @@ cmake -S /home1/maoyi/aurora/aom -B $build_afl \
   -DAOM_MAX_ALLOCABLE_MEMORY=1073741824
 cmake --build $build_afl -j$(nproc)
 
-$CXX $CXXFLAGS -I/home1/maoyi/aurora/aom -I$build_afl \
-      -c /home1/maoyi/aurora/aom/examples/av1_dec_fuzzer_afl.cc -o av1_dec_fuzzer_afl.o
+$CXX $CXXFLAGS -I/home1/maoyi/aom -I$build_afl \
+      -c /home1/maoyi/aom/examples/av1_highbd_dr_prediction_z3_avx2_afl.cc -o av1_highbd_dr_prediction_z3_avx2_afl.o
 
-$CXX $CXXFLAGS av1_dec_fuzzer_afl.o \
-      $build_afl/libaom.a -pthread -o $OUT/av1_dec_fuzzer_afl
+$CXX $CXXFLAGS av1_highbd_dr_prediction_z3_avx2_afl.o \
+      $build_afl/libaom.a -pthread -o $BEN_DIR/libaom-av1_highbd_dr_prediction_z3_avx2/av1_highbd_dr_prediction_z3_avx2_afl
 
 # trace
 export CC=clang
 export CXX=clang++
-export CFLAGS="-ggdb -O0"
-export CXXFLAGS="-ggdb -O0 -std=c++11"
 
-build_trace=/home1/maoyi/aurora/aom/build_trace
+DBG_FLAGS="-g3 -gcolumn-info -fno-omit-frame-pointer"
+OPT_FLAGS="-O0"
+STD_FLAGS="-std=c++11"
+
+export CFLAGS="$OPT_FLAGS $DBG_FLAGS"
+export CXXFLAGS="$OPT_FLAGS $DBG_FLAGS $STD_FLAGS"
+
+build_trace=/home1/maoyi/aom/build_av1_highbd_dr_prediction_z3_avx2_trace
 rm -rf $build_trace && mkdir -p $build_trace
-cmake -S /home1/maoyi/aurora/aom -B $build_trace \
+cmake -S /home1/maoyi/aom -B $build_trace \
   -DCMAKE_C_COMPILER="$CC" \
   -DCMAKE_CXX_COMPILER="$CXX" \
   -DCMAKE_C_FLAGS_RELEASE="$CFLAGS" \
@@ -126,11 +140,11 @@ cmake -S /home1/maoyi/aurora/aom -B $build_trace \
   -DAOM_MAX_ALLOCABLE_MEMORY=1073741824
 cmake --build $build_trace -j$(nproc)
 
-$CXX ${=CXXFLAGS} -I/home1/maoyi/aurora/aom -I$build_trace \
-      -c /home1/maoyi/aurora/aom/examples/av1_dec_fuzzer_trace.cc -o av1_dec_fuzzer_trace.o
+$CXX ${=CXXFLAGS} -I/home1/maoyi/aom -I$build_trace \
+      -c /home1/maoyi/aom/examples/av1_highbd_dr_prediction_z3_avx2_trace.cc -o av1_highbd_dr_prediction_z3_avx2_trace.o
 
-$CXX ${=CXXFLAGS} av1_dec_fuzzer_trace.o \
-      $build_trace/libaom.a -pthread -o $OUT/av1_dec_fuzzer_trace
+$CXX ${=CXXFLAGS} av1_highbd_dr_prediction_z3_avx2_trace.o \
+      $build_trace/libaom.a -pthread -o $BEN_DIR/libaom-av1_highbd_dr_prediction_z3_avx2/av1_highbd_dr_prediction_z3_avx2_trace
 
 
 # av1_dr_prediction_z3_sse4_1
@@ -164,7 +178,7 @@ $CXX $CXXFLAGS -I/home1/maoyi/aurora/aom -I$build_afl_2 \
       -c /home1/maoyi/aurora/aom/examples/av1_dec_fuzzer_afl_2.cc -o av1_dec_fuzzer_afl_2.o
 
 $CXX $CXXFLAGS av1_dec_fuzzer_afl_2.o \
-      $build_afl_2/libaom.a -pthread -o $OUT/av1_dec_fuzzer_afl_2
+      $build_afl_2/libaom.a -pthread -o $BEN_DIR/av1_dec_fuzzer_afl_2
 
 # trace
 export CC=clang
@@ -194,4 +208,4 @@ $CXX ${=CXXFLAGS} -I/home1/maoyi/aurora/aom -I$build_trace_2 \
       -c /home1/maoyi/aurora/aom/examples/av1_dec_fuzzer_trace_2.cc -o av1_dec_fuzzer_trace_2.o
 
 $CXX ${=CXXFLAGS} av1_dec_fuzzer_trace_2.o \
-      $build_trace_2/libaom.a -pthread -o $OUT/av1_dec_fuzzer_trace_2
+      $build_trace_2/libaom.a -pthread -o $BEN_DIR/av1_dec_fuzzer_trace_2
