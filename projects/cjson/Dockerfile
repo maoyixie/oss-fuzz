@@ -21,6 +21,8 @@ FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y cmake
 
 RUN git clone --depth 1 https://github.com/DaveGamble/cJSON.git cjson
+RUN git fetch --unshallow && \
+    git checkout 87d8f0961a01bf09bef98ff89bae9fdec42181ee
 
 WORKDIR cjson
 COPY build.sh $SRC/
