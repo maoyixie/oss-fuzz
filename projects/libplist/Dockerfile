@@ -17,7 +17,9 @@
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y make autoconf automake libtool pkg-config
 
-RUN git clone --depth 1 https://github.com/libimobiledevice/libplist
+RUN git clone https://github.com/libimobiledevice/libplist && \
+    cd libplist && \
+    git checkout c46afc87ad605936ebcb6c03d3f309f818fd6f09
 WORKDIR libplist
 
 COPY build.sh $SRC/
