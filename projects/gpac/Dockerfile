@@ -16,7 +16,10 @@
 
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y build-essential pkg-config libz-dev
-RUN git clone https://github.com/gpac/gpac && cd gpac && git submodule update --init --remote --recursive
+RUN git clone https://github.com/gpac/gpac && \
+    cd gpac && \
+    git checkout 6da37dcc6827649637485417f0e3a79de9667be0 && \
+    git submodule update --init --remote --recursive
 
 COPY build.sh $SRC/
 WORKDIR $SRC/gpac
