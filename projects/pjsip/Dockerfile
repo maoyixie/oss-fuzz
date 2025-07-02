@@ -17,6 +17,6 @@ FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y autoconf libtool-bin pkg-config libssl-dev zlib1g-dev
 RUN git clone https://github.com/pjsip/pjproject pjsip && \
     cd pjsip && \
-    git checkout cbccd497a9f6cf1e6bf7b72a92980e40cdbc7694
+    git checkout d555ec102be0a6841914202116d399042f7a6e80
 COPY build.sh $SRC/
 WORKDIR $SRC/pjsip/
