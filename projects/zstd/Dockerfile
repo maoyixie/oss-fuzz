@@ -17,6 +17,8 @@
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y make python wget
 # Clone source
-RUN git clone --depth 1 https://github.com/facebook/zstd
+RUN git clone https://github.com/facebook/zstd && \
+    cd zstd && \
+    git checkout 3487a60950ea01e89883a3e807a18a6e155768b7
 WORKDIR zstd
 COPY build.sh $SRC/
