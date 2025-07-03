@@ -23,10 +23,15 @@ RUN apt-get update && apt-get install -y \
 
 RUN python3 -m pip install  --upgrade pip && python3 -m pip install packaging
 RUN python3 -m pip install -U meson ninja
-RUN git clone git://git.kernel.org/pub/scm/libs/ell/ell.git
-RUN git clone --depth 1 https://github.com/bluez/bluez bluez
+RUN git clone git://git.kernel.org/pub/scm/libs/ell/ell.git && \
+    cd ell && \
+    git checkout 9a6b5d280bf0712969bd5756f79280388beb8023
+RUN git clone https://github.com/bluez/bluez && \
+    cd bluez && \
+    git checkout 822037fe74503fe87c3dc0b11dc69f2e9efa2376
 RUN git clone https://github.com/GNOME/glib  && \
     cd glib && \
+    git checkout db3c92d3abc3d77801b327bd93666a2c2077e946 && \
     meson _build -Db_lundef=false -Ddefault_library=static -Dlibmount=disabled && \
     ninja -C _build && \
     ninja -C _build install
