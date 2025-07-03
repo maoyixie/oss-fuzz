@@ -16,6 +16,8 @@
 
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y cmake bison flex
-RUN git clone --branch develop  https://github.com/igraph/igraph
+RUN git clone --branch develop  https://github.com/igraph/igraph && \
+    cd igraph && \
+    git checkout e2a3b7c6e26683e9bb5f6a07d4e380861bd40f93
 WORKDIR igraph
 RUN cp $SRC/igraph/fuzzing/build.sh $SRC/build.sh
