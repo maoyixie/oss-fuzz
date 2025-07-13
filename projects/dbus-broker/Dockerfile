@@ -15,6 +15,8 @@
 ################################################################################
 
 FROM gcr.io/oss-fuzz-base/base-builder
-RUN git clone --depth 1 https://github.com/bus1/dbus-broker
+RUN git clone https://github.com/bus1/dbus-broker && \
+    cd dbus-broker && \
+    git checkout be2875131bd717afc759e3bf5ba4547992ffdb9c
 WORKDIR dbus-broker
 COPY *.c build.sh $SRC/
