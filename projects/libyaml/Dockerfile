@@ -17,7 +17,9 @@
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y make autoconf automake libtool
 
-RUN git clone --depth=1 https://github.com/yaml/libyaml
+RUN git clone https://github.com/yaml/libyaml && \
+    cd libyaml && \
+    git checkout 840b65c40675e2d06bf40405ad3f12dec7f35923
 RUN zip $SRC/libyaml_seed_corpus.zip libyaml/examples/*
 
 WORKDIR libyaml

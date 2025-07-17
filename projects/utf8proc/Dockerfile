@@ -19,9 +19,9 @@ FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && \
     apt-get install -y wget tar
 
-RUN git clone https://github.com/JuliaStrings/utf8proc.git && \
+RUN git clone https://github.com/maoyixie/utf8proc.git && \
     cd utf8proc && \
-    git checkout d05ed9ec91b2150b852cd9d59a72a19a47245971
+    git checkout arash
 
 RUN wget -O $SRC/utf8proc/test/NormalizationTest.txt https://www.unicode.org/Public/13.0.0/ucd/NormalizationTest.txt
 RUN wget -O $SRC/utf8proc/test/GraphemeBreakTest.txt https://www.unicode.org/Public/13.0.0/ucd/auxiliary/GraphemeBreakTest.txt
