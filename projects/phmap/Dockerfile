@@ -15,9 +15,7 @@
 ################################################################################
 
 FROM gcr.io/oss-fuzz-base/base-builder
-RUN git clone https://github.com/greg7mdp/parallel-hashmap \
-    && cd parallel-hashmap \
-    && git checkout 640aef361d67189e99a7d2ee2bc4e0f889071294
+RUN git clone https://github.com/greg7mdp/parallel-hashmap
 
 WORKDIR $SRC/parallel-hashmap
 COPY build.sh $SRC/

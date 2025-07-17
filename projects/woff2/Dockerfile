@@ -17,7 +17,11 @@
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y make autoconf automake libtool
 
-RUN git clone --depth 1 --recursive https://github.com/google/woff2
+RUN git clone --depth 1 --recursive https://github.com/google/woff2 \
+    && cd woff2 \
+    && git fetch --unshallow \
+    && git checkout 0f4d304faa1c62994536dc73510305c7357da8d4
+    
 WORKDIR woff2
 COPY build.sh *.options $SRC/
 COPY corpus $SRC/corpus
