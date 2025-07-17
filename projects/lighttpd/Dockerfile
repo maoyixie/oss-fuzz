@@ -16,7 +16,9 @@
 
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y libz-dev libpcre2-dev libtool pkg-config autoconf
-RUN git clone https://github.com/lighttpd/lighttpd1.4
+RUN git clone https://github.com/lighttpd/lighttpd1.4 \
+    && cd lighttpd1.4 \
+    && git checkout 154df56d60c2ea4af767eb9aff7d2122760ba5c9
 
 WORKDIR $SRC/lighttpd1.4
 COPY build.sh $SRC/
