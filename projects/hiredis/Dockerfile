@@ -15,6 +15,8 @@
 ################################################################################
 
 FROM gcr.io/oss-fuzz-base/base-builder
-RUN git clone --depth 1 https://github.com/redis/hiredis
+RUN git clone https://github.com/redis/hiredis && \
+    cd hiredis && \
+    git checkout 8d8703ee6149ffd3b38cebedd71ad8d1fac63cc7
 WORKDIR hiredis
 COPY build.sh $SRC/
