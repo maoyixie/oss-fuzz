@@ -16,6 +16,8 @@
 
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y make autoconf automake libtool
-RUN git clone --depth 1 https://github.com/c-ares/c-ares.git
+RUN git clone https://github.com/c-ares/c-ares.git && \
+    cd c-ares && \
+    git checkout 7f4f0b642a64ca677b25c7e882164101c0d084e2
 WORKDIR c-ares
 COPY build.sh $SRC/
