@@ -16,6 +16,9 @@
 
 FROM gcr.io/oss-fuzz-base/base-builder
 RUN apt-get update && apt-get install -y make autoconf automake libtool
-RUN git clone --depth 1 https://github.com/pytorch/cpuinfo
+RUN git clone https://github.com/pytorch/cpuinfo && \
+    cd cpuinfo && \
+    git checkout 7215904fd2a29f6771af6b6e81822641fff3ded2
+    
 WORKDIR cpuinfo
 COPY build.sh *.c $SRC/

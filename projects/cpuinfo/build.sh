@@ -18,6 +18,7 @@
 # Use fuzzer-file paths instead of kernel paths
 sed -i 's/"\/proc\/cpuinfo"/"\/tmp\/libfuzzer.config"/g' src/x86/linux/cpuinfo.c
 sed -i 's/"\/sys\/devices\/system\/cpu\/kernel_max"/"\/tmp\/libfuzzer.config"/g' src/linux/processors.c
+rm -rf build
 mkdir build
 cd build
 cmake ..
