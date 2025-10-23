@@ -66,7 +66,7 @@ popd
 fuzzer_src_name=av1_dec_fuzzer
 fuzzer_name=${fuzzer_src_name}
 
-$CXX $CXXFLAGS -std=c++11 \
+$CXX $CXXFLAGS -std=c++17 \
   -I$SRC/aom \
   -I${build_dir} \
   -Wl,--start-group \
